@@ -1,0 +1,35 @@
+version: "3"
+services:
+  psql:
+    hostname: "primary"
+    image: postgres:latest
+    container_name: crudtest-psql
+    user: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    environment:
+      - MAX_CONNECTIONS=10
+      - MAX_WAL_SENDERS=5
+      - POSTGRES_MODE=primary
+      - POSTGRES_PRIMARY_USER=postgres
+      - POSTGRES_PRIMARY_PASSWORD=123
+      - POSTGRES_DB=crudtest
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_ROOT_PASSWORD=123
+      - POSTGRES_PRIMARY_PORT=5432
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/psql/data
+      - ./db/seed:/tmp
+    networks:
+      - fullstack
+volumes:
+  db:
+networks:
+  fullstack:
+    driver: bridge
