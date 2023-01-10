@@ -1,11 +1,11 @@
 # HTTP REST API CRUD OPERATIONS EXAMPLE
 
 RESTful API example written using GIN framework;
-github.com/gin-gonic/gin
+https://github.com/gin-gonic/gin
 
 # Unit Testing:
 
-Unit-tests in order to guarantee code consistence were written. All tests implement mocked results using github.com/zhashkevych/go-sqlxmock and native net/http/httptest package.
+Unit-tests in order to guarantee code consistence were written. All tests implement mocked results using https://github.com/zhashkevych/go-sqlxmock and native net/http/httptest package.
 
 To run unit-tests, just type <b>make unit-test</b> command in terminal at the repository root folder.
 
