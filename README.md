@@ -30,7 +30,7 @@ Then finally run;<br />
 
 --------------------------------------------------------------------------------------------------------
 
-TODO:
-  [x] Operation Types API.
-  [] Account API.
-  [] Transactions API.
+TODO:<br ;>
+  :heavy_check_mark: Operation Types API.<br />
+  :white_check_mark: Account API.<br />
+  :white_check_mark: Transactions API.<br />
