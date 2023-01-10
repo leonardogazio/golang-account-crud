@@ -18,15 +18,15 @@ http://localhost:8080/swagger/index.html
 
 # Usage:
 
-1- Run make file commands in the following  order;
-<b>$ make postgres</b>
-<b>$ make migrate_up</b>
-<b>$ make seed</b>
-<b>$ make setup-swagger</b>
-
-Then finally run;
-<b>$ source .env.example</b>
-<b>$ make run</b>
+1- Run make file commands in the following  order;<br />
+<b>$ make postgres</b><br />
+<b>$ make migrate_up</b><br />
+<b>$ make seed</b><br />
+<b>$ make setup-swagger</b><br />
+<br />
+Then finally run;<br />
+<b>$ source .env.example</b><br />
+<b>$ make run</b><br />
 
 --------------------------------------------------------------------------------------------------------
 
