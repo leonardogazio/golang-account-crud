@@ -1,6 +1,10 @@
 package handlers
 
 import (
+	"io"
+	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 
@@ -19,4 +23,13 @@ func Init(m *testing.M) {
 	db.InitMocked = true
 	db.GetConnection() //database connection is mocked in this case, error check not needed
 	os.Exit(m.Run())
+}
+
+// MockedReq ...
+func MockedReq(verb, uri string, body io.Reader) (data []byte, rsc *httptest.ResponseRecorder) {
+	req, _ := http.NewRequest(verb, uri, body)
+	rsc = httptest.NewRecorder()
+	TestEngine.ServeHTTP(rsc, req)
+	data, _ = ioutil.ReadAll(rsc.Result().Body)
+	return
 }

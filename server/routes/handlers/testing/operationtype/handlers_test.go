@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
-	"net/http/httptest"
+	"strconv"
 	"testing"
+	"time"
 
 	"github.com/leonardogazio/golang-account-crud/db"
 	"github.com/leonardogazio/golang-account-crud/models"
@@ -82,15 +82,125 @@ func TestCreate(t *testing.T) {
 			}
 
 			jsn, _ := json.Marshal(test.req)
-			req, _ := http.NewRequest(http.MethodPost, "/v1/operation_types", bytes.NewBuffer(jsn))
-			rsc := httptest.NewRecorder()
-
-			handlers.TestEngine.ServeHTTP(rsc, req)
+			data, rsc := handlers.MockedReq(http.MethodPost, "/v1/operation_types", bytes.NewBuffer(jsn))
 			assert.Equal(test.wantStatusCode, rsc.Code)
 
-			data, _ := ioutil.ReadAll(rsc.Result().Body)
-			var body models.Response
+			body := models.Response{}
+			err := json.Unmarshal(data, &body)
+			assert.Nil(err)
 
+			if err == nil {
+				assert.Equal(test.wantRes, body)
+			}
+		})
+	}
+
+}
+
+func TestRead(t *testing.T) {
+	assert := assert.New(t)
+
+	pur := "Routes: HTTP 1.1 GET /operation_types"
+	qry := "SELECT (.+) FROM operation_types"
+	columns := []string{"id", "description", "created_at", "updated_at"}
+
+	tt := []struct {
+		purpose        string
+		req            string
+		mock           func(string)
+		wantRes        models.Response
+		wantStatusCode int
+	}{
+		{
+			purpose: fmt.Sprintf("%s - Success Case /Should return list.", pur),
+			mock: func(req string) {
+				q := db.Mock.ExpectQuery(qry)
+				if req != "" {
+					q.WithArgs(req)
+				}
+				q.WillReturnRows(
+					sqlxmock.NewRows(columns).
+						AddRow(1, "COMPRA A VISTA", time.Unix(1673281418, 0), time.Unix(1673281418, 0)).
+						AddRow(2, "COMPRA PARCELADA", time.Unix(1673281461, 0), time.Unix(1673281461, 0)).
+						AddRow(3, "SAQUE", time.Unix(1673281499, 0), time.Unix(1673281499, 0)).
+						AddRow(4, "PAGAMENTO", time.Unix(1673281543, 0), time.Unix(1673281543, 0)),
+				)
+			},
+			wantRes: models.Response{
+				Data: []interface{}{
+					map[string]interface{}{
+						"id":          1.,
+						"description": "COMPRA A VISTA",
+						"created_at":  "2023-01-09T13:23:38-03:00",
+						"updated_at":  "2023-01-09T13:23:38-03:00",
+					},
+					map[string]interface{}{
+						"id":          2.,
+						"description": "COMPRA PARCELADA",
+						"created_at":  "2023-01-09T13:24:21-03:00",
+						"updated_at":  "2023-01-09T13:24:21-03:00",
+					},
+					map[string]interface{}{
+						"id":          3.,
+						"description": "SAQUE",
+						"created_at":  "2023-01-09T13:24:59-03:00",
+						"updated_at":  "2023-01-09T13:24:59-03:00",
+					},
+					map[string]interface{}{
+						"id":          4.,
+						"description": "PAGAMENTO",
+						"created_at":  "2023-01-09T13:25:43-03:00",
+						"updated_at":  "2023-01-09T13:25:43-03:00",
+					},
+				},
+			},
+			wantStatusCode: http.StatusOK,
+		},
+		{
+			purpose: fmt.Sprintf("%s - Success Case /Should return COMPRA A VISTA by its ID 1.", pur),
+			req:     "1",
+			mock: func(r string) {
+				q := db.Mock.ExpectQuery(qry)
+				if r != "" {
+					r, _ := strconv.Atoi(r)
+					q.WithArgs(r)
+				}
+				q.WillReturnRows(
+					sqlxmock.NewRows(columns).
+						AddRow(1, "COMPRA A VISTA", time.Unix(1673281418, 0), time.Unix(1673281418, 0)).
+						AddRow(2, "COMPRA PARCELADA", time.Unix(1673281461, 0), time.Unix(1673281461, 0)).
+						AddRow(3, "SAQUE", time.Unix(1673281499, 0), time.Unix(1673281499, 0)).
+						AddRow(4, "PAGAMENTO", time.Unix(1673281543, 0), time.Unix(1673281543, 0)),
+				)
+			},
+			wantRes: models.Response{
+				Data: map[string]interface{}{
+					"id":          1.,
+					"description": "COMPRA A VISTA",
+					"created_at":  "2023-01-09T13:23:38-03:00",
+					"updated_at":  "2023-01-09T13:23:38-03:00",
+				},
+			},
+			wantStatusCode: http.StatusOK,
+		},
+	}
+
+	for _, test := range tt {
+		t.Run(test.purpose, func(_ *testing.T) {
+			if test.mock != nil {
+				test.mock(test.req)
+			}
+
+			uri := "/v1/operation_types"
+
+			if test.req != "" {
+				uri = fmt.Sprintf("%s/%s", uri, test.req)
+			}
+
+			data, rsc := handlers.MockedReq(http.MethodGet, uri, nil)
+			assert.Equal(test.wantStatusCode, rsc.Code)
+
+			var body models.Response
 			err := json.Unmarshal(data, &body)
 			assert.Nil(err)
 
