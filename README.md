@@ -24,7 +24,7 @@ http://localhost:8080/swagger/index.html
 <b>$ make seed</b><br />
 <b>$ make setup-swagger</b><br />
 <br />
-Then finally run;<br />
+2- Then finally run;<br />
 <b>$ source .env.example</b><br />
 <b>$ make run</b><br />
 
