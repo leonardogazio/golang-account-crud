@@ -5,7 +5,8 @@ https://github.com/gin-gonic/gin
 
 # Unit Testing:
 
-Unit-tests in order to guarantee code consistence were written. All tests implement mocked results using https://github.com/zhashkevych/go-sqlxmock and native net/http/httptest package.
+Unit-tests in order to guarantee code consistence were written. All tests implement mocked results using https://github.com/zhashkevych/go-sqlxmock and native net/http/httptest package. E.g;
+https://github.com/leonardogazio/golang-account-crud/blob/develop/server/routes/handlers/testing/operationtype/handlers_test.go
 
 To run unit-tests, just type <b>make unit-test</b> command in terminal at the repository root folder.
 
