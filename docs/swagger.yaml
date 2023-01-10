@@ -1,0 +1,148 @@
+definitions:
+  models.OperationType:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      updated_at:
+        type: string
+    required:
+    - description
+    type: object
+  models.Response:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
+  models.SwaggerCreateTemplate:
+    properties:
+      description:
+        type: string
+    type: object
+  models.SwaggerUpdateTemplate:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /operation_types:
+    get:
+      consumes:
+      - application/json
+      description: Get operation type list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.OperationType'
+                  type: array
+                message:
+                  type: string
+              type: object
+        "404":
+          description: Not Found
+      summary: Get operation types
+      tags:
+      - example
+    post:
+      consumes:
+      - application/json
+      description: Create a new operation type
+      parameters:
+      - description: Create operation type payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwaggerCreateTemplate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully Created!
+      summary: Create operation type
+      tags:
+      - example
+    put:
+      consumes:
+      - application/json
+      description: Update a new operation type
+      parameters:
+      - description: Update operation type payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwaggerUpdateTemplate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully Updated!
+      summary: Update operation type
+      tags:
+      - example
+  /operation_types/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a new operation type
+      parameters:
+      - description: Operation Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully Deleted!
+      summary: Delete operation type
+      tags:
+      - example
+    get:
+      consumes:
+      - application/json
+      description: Get operation type by ID
+      parameters:
+      - description: Operation Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.OperationType'
+                message:
+                  type: string
+              type: object
+        "404":
+          description: Not Found
+      summary: Get operation type
+      tags:
+      - example
+swagger: "2.0"

@@ -13,11 +13,19 @@ seed:
 unit-test:
 	go test -ldflags="-extldflags=-Wl,--allow-multiple-definition" -v ${PKGS}
 
-build:
+setup-swagger:
+	go install github.com/swaggo/swag/cmd/swag
+	make tidy
+	swag init
+
+build:tidy
 	go build -o ./bin/app
 
-build-x:
+build-x:tidy
 	docker run --rm -v $(shell pwd):/go/src/app -w /go/src/app leonardogazio/go:1.18 gox -osarch="linux/amd64" -output="app"
 
 run:
 	go run .
+
+tidy:
+	go mod tidy
