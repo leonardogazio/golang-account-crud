@@ -12,7 +12,7 @@ To run unit-tests, just type <b>make unit-test</b> command in terminal at the re
 
 --------------------------------------------------------------------------------------------------------
 
-It's possible to checkout the endpoints definition and test them in Swagger;
+It's possible to checkout the endpoints definition and test them in Swagger;<br />
 http://localhost:8080/swagger/index.html
 
 --------------------------------------------------------------------------------------------------------
